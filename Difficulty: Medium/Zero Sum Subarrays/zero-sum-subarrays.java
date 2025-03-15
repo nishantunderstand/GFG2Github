@@ -30,8 +30,15 @@ public class Main {
 // } Driver Code Ends
 
 
+
 class Solution {
     public int findSubarray(int[] arr) {
+        return prefixHashMapApproach(arr);
+    }
+    
+    // Saturday, March 15, 2025 9:30:47 PM
+    // Time Complexity:O(n) | Space Complexity:O(n)
+    public int prefixHashMapApproach(int[] arr) {
         int cnt = 0;
         int i = -1;
         int csum = 0;
@@ -40,7 +47,7 @@ class Solution {
         HashMap<Integer, Integer> hm = new HashMap<>();
         hm.put(0,1);
         
-        while(i<arr.length-1){
+        while(i<arr.length-1){ //<--
             i++;
             csum+=arr[i];
             
