@@ -1,11 +1,9 @@
 Sunday, March 16, 2025 8:02 AM
-If total README.md count is 16
+- If total README.md count is 16
 	=> then 15 is total 
 	=> 1 README is General One
 	=> Use ext:md (-1)
 	=> Use ext:java as a better to find it.
-
-
 
 Monday, February 24, 2025 1:49 AM
 - Easy : to Easy
