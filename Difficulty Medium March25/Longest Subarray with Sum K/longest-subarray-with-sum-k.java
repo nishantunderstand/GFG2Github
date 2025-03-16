@@ -51,8 +51,18 @@ class Solution {
             if(hm.containsKey(csum-k)){
                 maxLen = Math.max(maxLen , i - hm.get(csum-k)); //<--
             }
+            
+            // Approach 1
+            
+            if(!hm.containsKey(csum)){ //<--
+                hm.put(csum,i);
+            }
+            
             // Store only the First Occurence 
-            hm.putIfAbsent(csum,i); //<--
+            // Approach 2
+            // hm.putIfAbsent(csum,i); //<--
+            
+            
         }
         
         return maxLen;
