@@ -1,3 +1,8 @@
+git pull origin main && git add . && git commit -m "July-2025" && git push origin main 
+
+---
+
+
 - https://github.com/nishantunderstand/GFG2Github
 												 
 ---												 
