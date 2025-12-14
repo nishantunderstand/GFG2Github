@@ -10,6 +10,7 @@ cd /d "%repoLocation%"
 REM Check if .git exists, if not initialize and set up remote
 if not exist "%repoLocation%\.git" (
     echo Initializing new Git repository...
+		"%gitPath%" pull
     "%gitPath%" init
     "%gitPath%" add .
     "%gitPath%" commit -m "Initial commit"
