@@ -1,7 +1,11 @@
-git pull origin main && git add . && git commit -m "Sep-2025" && git push origin main 
+Testing 11111111111111111111111111
+
+
+
+
+git pull origin main && git add . && git commit -m "2025-Dec" && git push origin main 
 
 ---
-
 
 - https://github.com/nishantunderstand/GFG2Github
 												 
@@ -17,7 +21,6 @@ Sunday, March 16, 2025 8:02 AM
 - count Dilemma	
 	- Use ext:md (-1)
 	- Use ext:java, As it better to find it.
-
 
 Monday, February 24, 2025 1:49 AM
 - Easy : to Easy
