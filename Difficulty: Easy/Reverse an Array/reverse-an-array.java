@@ -1,6 +1,7 @@
 class Solution {
     public void reverseArray(int arr[]) {
-        if(arr==null || arr.length<0) return;
+        
+        if(arr==null || arr.length<=1) return;
         
         int start = 0;
         int end = arr.length-1;
