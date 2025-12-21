@@ -15,7 +15,7 @@ class Solution {
         
         for(int i=0;i<fMap.length;i++){
             if(fMap[i]==2) repeating = i+1;
-            if(fMap[i]==0) missing = i+1;
+            else if(fMap[i]==0) missing = i+1;
         }
         
         res.add(repeating);
