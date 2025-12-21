@@ -1,6 +1,22 @@
 class Solution {
     // Function to remove duplicates from the given array.
     ArrayList<Integer> removeDuplicates(int[] arr) {
+        
+        // UnSortedCase
+        // Cannot we use LinkedHashSet For Maintaining the Order
+        //Set<Integer> seen = new HashSet<>();
+        Set<Integer> seen = new LinkedHashSet<>();
+        for(int i=0;i<arr.length;i++){
+            seen.add(arr[i]);
+        }
+        
+        ArrayList<Integer> res = new ArrayList<>(seen);
+        //Collections.sort(res);
+        return res;
+    }
+    
+    
+    ArrayList<Integer> removeDuplicatesSortedCase(int[] arr) {
         ArrayList<Integer> res = new ArrayList<>();
         res.add(arr[0]);
         
@@ -9,7 +25,6 @@ class Solution {
                 res.add(arr[i]);
             }
         }
-        
         return res;
     }
 }
