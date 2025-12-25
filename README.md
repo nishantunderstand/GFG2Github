@@ -3,6 +3,15 @@ git pull origin main
 git add . && git commit -m "2025-Dec" && git push origin main
 
 ---
+Sunday, December 21, 2025 5:40 PM
+I really loved it.
+I need to start over.
+Learn From Scratch.
+
+
+
+
+---
 
 - https://github.com/nishantunderstand/GFG2Github
 												 
