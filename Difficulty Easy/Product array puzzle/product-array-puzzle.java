@@ -6,30 +6,24 @@ class Solution {
         int[] prefixProd = new int[n];
         int [] suffixProd = new int[n];
         
-        prefixProd[0]=arr[0]; // 1st Element
-        suffixProd[n-1]=arr[n-1]; // Last Element
-        
+        // Base Value 
+        prefixProd[0]=1; // 1st Element
+        suffixProd[n-1]=1; // Last Element
         
         
         for(int i=1;i<n;i++){
-            prefixProd[i]=prefixProd[i-1]*arr[i];
+            prefixProd[i]=prefixProd[i-1]*arr[i-1];
         }
         
         for(int i=n-2;i>=0;i--){
-            suffixProd[i]=suffixProd[i+1]*arr[i];
+            suffixProd[i]=suffixProd[i+1]*arr[i+1];
         }
         
         int[] res = new int[n];
         
         
-        // Edge Case
-        res[0]=suffixProd[1];
-        res[n-1]=prefixProd[n-2];
-        
-        
-        
-        for(int i=1;i<=n-2;i++){
-            res[i] = prefixProd[i-1] * suffixProd[i+1];
+        for(int i=0;i<n;i++){
+            res[i] = prefixProd[i] * suffixProd[i];
         }
         
         return res;

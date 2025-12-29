@@ -2,6 +2,12 @@ import java.util.*;
 
 class Solution {
     public int kthSmallest(int[] arr, int k) {
+        return heapApproach(arr,k);
+        return bruteForce()
+    }
+    
+    
+    private int heapApproach(int[] arr, int k) {
         // Max Priority Queue 
         PriorityQueue<Integer> maxPQ = 
             new PriorityQueue<>(Collections.reverseOrder());

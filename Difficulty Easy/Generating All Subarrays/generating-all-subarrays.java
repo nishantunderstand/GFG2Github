@@ -1,60 +1,45 @@
-//{ Driver Code Starts
-import java.io.*;
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int testCases = Integer.parseInt(br.readLine().trim());
-
-        Solution ob = new Solution();
-
-        while (testCases-- > 0) {
-            // Read the array from input line
-            String[] input = br.readLine().trim().split(" ");
-            int[] arr = new int[input.length];
-            for (int i = 0; i < input.length; i++) {
-                arr[i] = Integer.parseInt(input[i]);
-            }
-
-            // Invoke the function and print the result
-            List<List<Integer>> result = ob.getSubArrays(arr);
-
-            System.out.print("[");
-            for (int i = 0; i < result.size(); i++) {
-                List<Integer> subarray = result.get(i);
-                System.out.print("[");
-                for (int j = 0; j < subarray.size(); j++) {
-                    System.out.print(subarray.get(j));
-                    if (j != subarray.size() - 1) {
-                        System.out.print(",");
-                    }
-                }
-                System.out.print("]");
-                if (i != result.size() - 1) {
-                    System.out.print(", ");
-                }
-            }
-            System.out.println("]");
-        }
-    }
-}
-
-// } Driver Code Ends
-
-
 // User function Template for Java
 class Solution {
     public List<List<Integer>> getSubArrays(int[] arr) {
+        return bruteForce(arr);
+    }
+    
+    // TC O(n^3) || SC O(n^3)
+    private List<List<Integer>> optimizedOne(int[] arr) {
         List<List<Integer>> res = new ArrayList<>();
         int len = arr.length;
+        
+        for(int i=0;i<len;i++){
+            List<Integer> inner = new ArrayList<>();
+            for(int j=i;j<len;j++){
+                
+                
+                for(int k=i;k<=j;k++){
+                    inner.add(arr[k]);
+                }
+                res.add(inner);
+            }
+        }
+        return res;
+    }
+    
+    
+    
+    
+    
+    // TC O(n^3) || SC O(n^3)
+    private List<List<Integer>> bruteForce(int[] arr) {
+        List<List<Integer>> res = new ArrayList<>();
+        int len = arr.length;
+        
         for(int i=0;i<len;i++){
             for(int j=i;j<len;j++){
-                List<Integer> curr = new ArrayList<>();
+                List<Integer> inner = new ArrayList<>();
+                
                 for(int k=i;k<=j;k++){
-                    curr.add(arr[k]);
+                    inner.add(arr[k]);
                 }
-                res.add(curr);
+                res.add(inner);
             }
         }
         return res;
