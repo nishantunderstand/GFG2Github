@@ -1,0 +1,50 @@
+name: Auto Fix Colon Folder Names
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  fix-folders:
+    # ⛔ Prevent infinite loop
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Fix folder names ending with colon
+        run: |
+          TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+          CHANGED=false
+
+          for DIR in */; do
+            CLEAN="${DIR%/}"
+            if [[ "$CLEAN" == *: ]]; then
+              NEW="${CLEAN%:}"
+              if [ -d "$NEW" ]; then
+                NEW="${NEW}_${TIMESTAMP}"
+              fi
+              echo "Renaming $CLEAN → $NEW"
+              mv "$CLEAN" "$NEW"
+              CHANGED=true
+            fi
+          done
+
+          if [ "$CHANGED" = true ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions@users.noreply.github.com"
+            git add .
+            git commit -m "Auto-fix folder names (remove colon)"
+            git push
+          else
+            echo "No colon folders found. Nothing to commit."
+          fi
