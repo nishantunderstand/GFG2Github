@@ -1,50 +1,52 @@
-name: Auto Fix Colon Folder Names
+name: Enforce Folder Naming (No Colon)
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ main, master ]
 
 permissions:
   contents: write
 
 jobs:
-  fix-folders:
-    # ⛔ Prevent infinite loop
-    if: github.actor != 'github-actions[bot]'
+  enforce:
     runs-on: ubuntu-latest
+
+    # 🔒 Prevent infinite loop
+    if: |
+      !contains(github.event.head_commit.message, 'Auto-fix folder names')
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          fetch-depth: 0
 
-      - name: Fix folder names ending with colon
+      - name: Detect and fix colon folders
         run: |
+          set -e
           TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
           CHANGED=false
 
-          for DIR in */; do
-            CLEAN="${DIR%/}"
-            if [[ "$CLEAN" == *: ]]; then
-              NEW="${CLEAN%:}"
-              if [ -d "$NEW" ]; then
-                NEW="${NEW}_${TIMESTAMP}"
-              fi
-              echo "Renaming $CLEAN → $NEW"
-              mv "$CLEAN" "$NEW"
-              CHANGED=true
+          # Scan entire repo
+          while IFS= read -r DIR; do
+            CLEAN="${DIR%:}"
+            TARGET="$CLEAN"
+
+            if [ -d "$TARGET" ]; then
+              TARGET="${CLEAN}_${TIMESTAMP}"
             fi
-          done
+
+            echo "Fixing: $DIR -> $TARGET"
+            mv "$DIR" "$TARGET"
+            CHANGED=true
+          done < <(find . -type d -name '*:')
 
           if [ "$CHANGED" = true ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions@users.noreply.github.com"
-            git add .
+            git add -A
             git commit -m "Auto-fix folder names (remove colon)"
             git push
           else
-            echo "No colon folders found. Nothing to commit."
+            echo "Repo is clean. No action needed."
           fi
