@@ -1,10 +1,12 @@
-import java.util.*;
+// User function Template for Java
 
-
-// Move all negative elements to end
 class Solution {
-    // Overwrite Approach
     public void segregateElements(int[] arr) {
+        overwriteApproach(arr);
+    }
+    
+    // Overwrite Approach
+    public void overwriteApproach(int[] arr) {
         int idx = 0;
         int[] temp = new int[arr.length];
         
@@ -25,9 +27,4 @@ class Solution {
         System.arraycopy(temp,0,arr,0,arr.length);
         
     }
-    
 }
-/**
-1 -1 3 2 -7 -5 11 6
-
-*/
