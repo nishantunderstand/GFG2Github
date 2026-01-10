@@ -27,3 +27,6 @@ class Solution {
         return res;
     }
 }
+
+// 0 ≤ l ≤ r < arr.size()
+// How to spot the difference ? 0 or 1 Based Indexing
