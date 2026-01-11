@@ -19,6 +19,6 @@ class Solution {
             p1 = (p1!=null)?p1.next:head2;
             p2 = (p2!=null)?p2.next:head1;
         }
-        return p1;
+        return p2;
     }
 }
