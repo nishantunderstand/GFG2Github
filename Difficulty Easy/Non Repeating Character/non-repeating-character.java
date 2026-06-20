@@ -3,8 +3,24 @@
 class Solution {
     // Function to find the first non-repeating character in a string.
     static char nonRepeatingChar(String s) {
-        return twoPassSolHashMap(s);
+        //return twoPassSolHashMap(s);
+        return twoPassSolFreqMap(s);
     }
+    static char twoPassSolFreqMap(String s) {
+        int[] fMap = new int[26];
+        // Build FMap
+        for(char ch : s.toCharArray()){
+            fMap[ch-'a']++;
+        }
+        
+        for(char ch : s.toCharArray()){
+            if(fMap[ch-'a']==1){
+                return ch;
+            }
+        }
+        return '$';
+    }
+    
     
     static char twoPassSolHashMap(String s) {
         LinkedHashMap<Character,Integer> hm = new LinkedHashMap<>();

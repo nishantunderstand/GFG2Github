@@ -1,21 +1,22 @@
-import java.util.*;
-
 class Solution {
     public ArrayList<Integer> getMinMax(int[] arr) {
-        
-        int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
-        
-        for(int i=0;i<arr.length;i++){
-            if(arr[i]>max) max=arr[i];
-            if(arr[i]<min) min=arr[i];
-        }
-        
-        // return new Arrays.asList(min,max); // WRONG 
-        // List<Integer> res = new ArrayList<>(); // WHY Incompatiable
-        ArrayList<Integer> res = new ArrayList<>();
-        res.add(min);
-        res.add(max);
-        return res;
+        int min = findMin(arr,arr.length-1);
+        int max = findMax(arr,arr.length-1);
+        ArrayList<Integer> result = new ArrayList<>();
+        result.add(min);
+        result.add(max);
+        return result;
+    }
+    
+    private int findMin(int[] arr,int idx){
+        if(idx==0) return arr[0];
+        int recursiveMin = findMin(arr,idx-1);
+        return Math.min(arr[idx],recursiveMin);
+    }
+    
+    private int findMax(int[] arr,int idx){
+        if(idx==0) return arr[0];
+        int recursiveMax = findMax(arr,idx-1);
+        return Math.max(arr[idx],recursiveMax);
     }
 }
