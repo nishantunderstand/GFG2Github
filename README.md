@@ -1,6 +1,6 @@
-git pull origin main
+clear && git pull origin main
 
-git add . && git commit -m "2026-June" && git push origin main
+clear && git add . && git commit -m "2026-June" && git push origin main
 
 git push origin main --force
 
