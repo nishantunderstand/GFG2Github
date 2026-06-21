@@ -10,7 +10,7 @@ class Solution {
         int n = arr.length;
         
         for(int i=1;i<n;i++){
-            if(arr[i]==arr[i-1]){
+            if(arr[i]==arr[i-1]){ 
                 cnt++;
             }
             else{
