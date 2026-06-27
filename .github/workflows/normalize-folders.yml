@@ -1,0 +1,132 @@
+name: Normalize Difficulty Folders
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Normalize difficulty folder names
+        env:
+          COMMIT_DATE: ${{ github.event.head_commit.timestamp }}
+        run: |
+          python3 << 'EOF'
+          import os
+          import re
+          import shutil
+          from datetime import datetime, timezone
+
+          ROOT = "."
+
+          # Parse commit date → "2026-06-27"
+          raw_ts = os.environ.get("COMMIT_DATE", "")
+          try:
+              dt       = datetime.fromisoformat(raw_ts.replace("Z", "+00:00"))
+              DATE_STR = dt.strftime("%Y-%m-%d")
+          except Exception:
+              DATE_STR = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+          print(f"Commit date: {DATE_STR}")
+
+          # ── Classifiers ────────────────────────────────────────────────
+          # BAD  → "Difficulty: Easy"     → Difficulty Easy_2026-06-27
+          # BAD  → "Difficulty Easy_1"    → Difficulty Easy_2026-06-27
+          # GOOD → "Difficulty Easy"               (manual, untouched)
+          # GOOD → "Difficulty Easy_2026-06-27"    (already dated, untouched)
+
+          COLON_RE    = re.compile(r'^Difficulty\s*:\s*(.+)$')
+          CONFLICT_RE = re.compile(r'^(Difficulty\s+\w+)_\d+$')
+          DATED_RE    = re.compile(r'^Difficulty\s+\w+_\d{4}-\d{2}-\d{2}')
+          CLEAN_RE    = re.compile(r'^Difficulty\s+\w+$')
+
+          def base_level(name):
+              m = COLON_RE.match(name)
+              if m:
+                  return m.group(1).strip()
+              m = CONFLICT_RE.match(name)
+              if m:
+                  return m.group(1).replace("Difficulty ", "").strip()
+              return None
+
+          def move_into_dated(src_folder, dated_path):
+              """
+              Move every problem folder as-is into Difficulty Easy_2026-06-27/
+              Problem folder name stays clean — date is only on the parent.
+
+              Difficulty Easy_2026-06-27/
+                └── Delete Head of Doubly Linked List/   ← clean, no suffix
+                      └── Solution.java
+              """
+              os.makedirs(dated_path, exist_ok=True)
+
+              for item in os.listdir(src_folder):
+                  src = os.path.join(src_folder, item)
+                  dst = os.path.join(dated_path, item)
+                  # dated_path is unique per day — safe to move as-is
+                  shutil.move(src, dst)
+                  print(f"    Moved: '{item}'")
+
+          # ── Main logic ─────────────────────────────────────────────────
+          changed = False
+
+          for entry in sorted(os.listdir(ROOT)):
+              full = os.path.join(ROOT, entry)
+              if not os.path.isdir(full):
+                  continue
+              if not entry.startswith("Difficulty"):
+                  continue
+
+              # Already correct — leave alone
+              if CLEAN_RE.match(entry) or DATED_RE.match(entry):
+                  continue
+
+              level = base_level(entry)
+              if level is None:
+                  print(f"Skipping unrecognised: {entry}")
+                  continue
+
+              # Target: "Difficulty Easy_2026-06-27"
+              dated_folder = f"Difficulty {level}_{DATE_STR}"
+              dated_path   = os.path.join(ROOT, dated_folder)
+
+              print(f"Routing '{entry}' → '{dated_folder}'")
+              move_into_dated(full, dated_path)
+
+              remaining = os.listdir(full)
+              if not remaining:
+                  os.rmdir(full)
+                  print(f"  Removed: {entry}")
+                  changed = True
+              else:
+                  print(f"  Warning: '{entry}' still has items: {remaining}")
+
+          if not changed:
+              print("Nothing to normalize.")
+          EOF
+
+      - name: Commit if changed
+        env:
+          COMMIT_DATE: ${{ github.event.head_commit.timestamp }}
+        run: |
+          COMMIT_DATE_SHORT=$(echo "$COMMIT_DATE" | cut -c1-10)
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "GFG Auto-Sync ${COMMIT_DATE_SHORT} by GitBot"
+            git push origin main
+          fi
