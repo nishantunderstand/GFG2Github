@@ -2,6 +2,7 @@ class Solution {
     public int countRevPairs(int[] arr) {
         //return bruteForce(arr);
         return mergeSort(arr,0,arr.length-1);
+        
     }
 
     // Friday, June 26, 2026 10:13:01 PM
