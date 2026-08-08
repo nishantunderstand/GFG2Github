@@ -1,0 +1,22 @@
+class Solution {
+    public String removePair(String s) {
+        Stack<Character> st = new Stack<>();
+        for(char ch : s.toCharArray()){
+            if(!st.isEmpty() && ch==st.peek()){
+                st.pop();
+            }else{
+                st.push(ch);    
+            }
+            
+        }
+        
+    
+        StringBuilder sb = new StringBuilder();
+        while(!st.isEmpty()){
+            sb.append(st.pop());
+        }
+        String res = sb.reverse().toString();
+        return res.isEmpty()?"-1":res;
+    }
+}
+// GFG : Remove Consecutive Two Same
