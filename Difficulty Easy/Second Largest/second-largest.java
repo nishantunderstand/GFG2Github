@@ -1,7 +1,30 @@
 class Solution {
     public int getSecondLargest(int[] arr) {
         //return getSecondLargestOnePassSolution(arr);
-        return getSecondLargestOnePassSolution2(arr);
+        //return getSecondLargestOnePassSolution2(arr);
+        //return sortingApproach(arr);
+        return streamApproach(arr);
+        
+    }
+    private int streamApproach(int[] arr){
+        return Arrays.stream(arr)
+        .distinct()
+        .boxed()
+        .sorted(Comparator.reverseOrder())
+        .skip(1)
+        .findFirst()
+        .orElse(-1);
+    }    
+    
+    private int sortingApproach(int[] arr){
+        Arrays.sort(arr);
+        int n = arr.length;
+        for(int i=n-2;i>=0;i--){
+            if(arr[i]!=arr[n-1]){ //<--
+                return arr[i];
+            }
+        }
+        return -1;
     }
     
     
